@@ -1,0 +1,59 @@
+/* Dashboard Page Styles */
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* desktop default */
+  gap: 1.5rem;
+  justify-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .dashboardGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+    width: 100%;
+  }
+
+  .dashboardCard {
+    padding: 1rem !important;
+    min-height: 120px;
+    max-width: 170px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboardCardIcon {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dashboardCardTitle {
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    text-align: center;
+    width: 100%;
+    line-height: 1.2;
+  }
+
+  .dashboardCardSubtitle {
+    font-size: clamp(12px, 2.5vw, 15px);
+    color: #b3b3b3;
+    text-align: center;
+    width: 100%;
+    line-height: 1.2;
+  }
+}
