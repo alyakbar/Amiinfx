@@ -1,9 +1,9 @@
-
-
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { CreditCard, Apple, BadgeCheck, ArrowLeft, Landmark } from "lucide-react";
+
+const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!;
 
 const SERVICES = [
   { id: "signals", title: "Premium Trading Signals", desc: "Get expert-generated signals directly to your phone or platform.", price: 100 },
@@ -30,13 +30,9 @@ export default function CheckoutPage() {
   slug = slug.trim().toLowerCase();
   const service = SERVICES.find(s => s.id.toLowerCase() === slug);
 
-  // Payment form state (placeholder logic)
   const [form, setForm] = useState({
     name: "",
     email: "",
-    card: "",
-    expiry: "",
-    cvv: "",
     saveCard: false,
     paymentMethod: "card",
     mpesa: "",
@@ -44,6 +40,32 @@ export default function CheckoutPage() {
     wallet: "",
   });
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handlePaystackRedirect(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name || !form.email || !service?.price) return;
+    setLoading(true);
+
+    const res = await fetch("/api/paystack/initialize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: form.email,
+        amount: service.price * 100,
+        name: form.name,
+        service: service.title,
+      }),
+    });
+
+    const data = await res.json();
+    if (data.status && data.data?.authorization_url) {
+      window.location.href = data.data.authorization_url;
+    } else {
+      alert("Error initializing payment");
+      setLoading(false);
+    }
+  }
 
   if (!service) {
     return (
@@ -88,98 +110,41 @@ export default function CheckoutPage() {
 
         {/* Right: Payment Form */}
         <div className="md:w-1/2 w-full bg-gray-900 p-8 flex flex-col justify-between">
-          <form className="space-y-5" onSubmit={e => { e.preventDefault(); setSuccess(true); }}>
+          <form className="space-y-5" onSubmit={form.paymentMethod === 'card' ? handlePaystackRedirect : (e => { e.preventDefault(); setSuccess(true); })}>
             <div>
               <label className="block text-gray-300 mb-1 font-semibold">Name</label>
-              <input type="text" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Full Name" />
+              <input type="text" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} placeholder="Full Name" />
             </div>
             <div>
               <label className="block text-gray-300 mb-1 font-semibold">Email</label>
-              <input type="email" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="Email Address" />
-            </div>
-            {/* Express Checkout Buttons */}
-            <div className="flex gap-2">
-              <button type="button" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold bg-yellow-400 hover:bg-yellow-300 text-black border border-yellow-500 shadow transition-all">
-                <CreditCard className="h-5 w-5 text-yellow-700" /> PayPal
-              </button>
-              <button type="button" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-bold bg-black hover:bg-gray-800 text-white border border-gray-700 shadow transition-all">
-                <Apple className="h-5 w-5 text-white" /> Apple Pay
-              </button>
+              <input type="email" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="Email Address" />
             </div>
             {/* Payment Method Tabs */}
             <div>
               <div className="flex gap-2 mb-3">
                 {['card', 'mpesa', 'crypto'].map(method => (
-                  method !== 'klarna' && (
-                    <button
-                      key={method}
-                      type="button"
-                      className={`flex-1 py-2 rounded-lg font-bold border transition-all ${form.paymentMethod === method ? 'bg-green-600 text-white border-green-700' : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700'}`}
-                      onClick={() => setForm(f => ({ ...f, paymentMethod: method }))}
-                    >
-                      {method === 'card' && 'Card'}
-                      {method === 'mpesa' && 'MPesa'}
-                      {method === 'crypto' && 'Crypto'}
-                    </button>
-                  )
+                  <button
+                    key={method}
+                    type="button"
+                    className={`flex-1 py-2 rounded-lg font-bold border transition-all ${form.paymentMethod === method ? 'bg-green-600 text-white border-green-700' : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700'}`}
+                    onClick={() => setForm(f => ({ ...f, paymentMethod: method }))}
+                  >
+                    {method === 'card' && 'Card'}
+                    {method === 'mpesa' && 'MPesa'}
+                    {method === 'crypto' && 'Crypto'}
+                  </button>
                 ))}
               </div>
-              {/* Card Payment Fields */}
               {form.paymentMethod === 'card' && (
-                <>
-                  <div>
-                    <label className="block text-gray-300 mb-1 font-semibold">Card Number</label>
-                    <input type="text" required maxLength={19} className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500 tracking-widest" value={form.card} onChange={e => setForm(f => ({ ...f, card: e.target.value }))} placeholder="1234 5678 9012 3456" inputMode="numeric" />
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <label className="block text-gray-300 mb-1 font-semibold">Expiry</label>
-                      <input type="text" required maxLength={5} className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.expiry} onChange={e => setForm(f => ({ ...f, expiry: e.target.value }))} placeholder="MM/YY" inputMode="numeric" />
-                    </div>
-                    <div className="flex-1">
-                      <label className="block text-gray-300 mb-1 font-semibold">CVV</label>
-                      <input type="text" required maxLength={4} className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.cvv} onChange={e => setForm(f => ({ ...f, cvv: e.target.value }))} placeholder="123" inputMode="numeric" />
-                    </div>
-                  </div>
-                </>
-              )}
-              {/* MPesa Payment Fields */}
-              {form.paymentMethod === 'mpesa' && (
                 <div>
-                  <label className="block text-gray-300 mb-1 font-semibold">MPesa Phone Number</label>
-                  <input type="tel" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.mpesa || ''} onChange={e => setForm(f => ({ ...f, mpesa: e.target.value }))} placeholder="e.g. 0712 345 678" />
+                  <button type="submit" disabled={loading} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg shadow-lg text-lg mt-2 flex items-center justify-center gap-2">
+                    {loading ? 'Redirecting...' : 'Pay with Paystack'}
+                  </button>
                 </div>
               )}
-              {/* Crypto Payment Fields */}
-              {form.paymentMethod === 'crypto' && (
-                <>
-                  <div>
-                    <label className="block text-gray-300 mb-1 font-semibold">Cryptocurrency</label>
-                    <select className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white" value={form.cryptoType || ''} onChange={e => setForm(f => ({ ...f, cryptoType: e.target.value }))} title="Cryptocurrency">
-                      <option value="">Select</option>
-                      <option value="BTC">Bitcoin (BTC)</option>
-                      <option value="ETH">Ethereum (ETH)</option>
-                      <option value="USDT">Tether (USDT)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-gray-300 mb-1 font-semibold">Wallet Address</label>
-                    <input type="text" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-500" value={form.wallet || ''} onChange={e => setForm(f => ({ ...f, wallet: e.target.value }))} placeholder="Paste your wallet address" />
-                  </div>
-                </>
-              )}
             </div>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.saveCard} onChange={e => setForm(f => ({ ...f, saveCard: e.target.checked }))} className="accent-green-500" />
-              <span className="text-gray-300 text-sm">Save card for future use</span>
-            </label>
-            <button type="submit" className="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-lg shadow-lg text-lg mt-2 transition-all">
-              Pay Now {form.paymentMethod === 'card' && <span className="ml-2">(Card)</span>}
-              {form.paymentMethod === 'mpesa' && <span className="ml-2">(MPesa)</span>}
-              {form.paymentMethod === 'crypto' && <span className="ml-2">(Crypto)</span>}
-            </button>
           </form>
-          <div className="text-xs text-gray-500 mt-8 text-center">Powered by Pay.</div>
+          <div className="text-xs text-gray-500 mt-8 text-center">Powered by Paystack.</div>
         </div>
       </div>
     </div>

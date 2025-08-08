@@ -192,7 +192,7 @@ export default function HomePage() {
       <section
         className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
         style={{
-          background: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/6043989416608908918.jpg-0tKFMIkPQkxk2CKIGTPgvpZd7Mzj4K.jpeg')`,
+          background: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/hero.jpg')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
