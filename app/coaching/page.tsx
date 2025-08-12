@@ -48,7 +48,7 @@ export default function CoachingPage() {
                     </div>
                     <div>
                       <p className="text-gray-300 italic mb-2">
-                        "The one-on-one coaching completely transformed my trading."
+                        &quot;The one-on-one coaching completely transformed my trading.&quot;
                       </p>
                       <p className="text-white font-semibold">Sarah Mitchell</p>
                     </div>
@@ -64,7 +64,7 @@ export default function CoachingPage() {
                     </div>
                     <div>
                       <p className="text-gray-300 italic mb-2">
-                        "Amiin's personalized approach helped me develop a winning mindset."
+                        &quot;Amiin&apos;s personalized approach helped me develop a winning mindset.&quot;
                       </p>
                       <p className="text-white font-semibold">Marcus Johnson</p>
                     </div>

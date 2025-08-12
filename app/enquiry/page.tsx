@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -54,7 +53,7 @@ export default function EnquiryPage() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
+    setFormData((prev: typeof formData) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -89,7 +88,7 @@ export default function EnquiryPage() {
                     Get in <span className="text-red-400">TOUCH</span>
                   </h1>
                   <p className="text-gray-400 mt-2">
-                    Have questions or need assistance? We're here to help with any enquiries about our services.
+                    Have questions or need assistance? We&apos;re here to help with any enquiries about our services.
                   </p>
                 </div>
               </div>
@@ -175,7 +174,7 @@ export default function EnquiryPage() {
                       <HelpCircle className="h-8 w-8 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-white mb-2">Submit Your Enquiry</h3>
-                    <p className="text-gray-400">Fill out our contact form and we'll get back to you soon</p>
+                    <p className="text-gray-400">Fill out our contact form and we&apos;ll get back to you soon</p>
                   </div>
 
                   {!selectedEnquiry ? (

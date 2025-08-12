@@ -212,11 +212,11 @@ export default function AcademyPage() {
               {/* Additional Info */}
               <Card className="bg-gray-800 border-gray-700">
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-bold text-white mb-4">What You'll Learn</h3>
+                  <h3 className="text-lg font-bold text-white mb-4">What You&apos;ll Learn</h3>
                   <div className="space-y-2">
                     <div className="flex items-center">
                       <Check className="h-4 w-4 text-green-400 mr-2" />
-                      <span className="text-gray-300 text-sm">Amiin's exact entry and exit strategies</span>
+                      <span className="text-gray-300 text-sm">Amiin&apos;s exact entry and exit strategies</span>
                     </div>
                     <div className="flex items-center">
                       <Check className="h-4 w-4 text-green-400 mr-2" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -11,10 +11,11 @@ export default function CheckoutPage() {
   const priceParam = searchParams.get("price");
   const priceUSD = priceParam ? parseFloat(priceParam) : null;
 
-  const courseName = slug
+  // Ensure slug is a string before using replace
+  const courseName = typeof slug === "string"
     ? slug
         .replace(/-/g, " ")
-        .replace(/\b\w/g, (c) => c.toUpperCase())
+        .replace(/\b\w/g, (c: string) => c.toUpperCase())
     : "";
 
   const [name, setName] = useState("");

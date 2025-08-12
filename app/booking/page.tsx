@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,7 +9,7 @@ import { ArrowLeft, Calendar, RefreshCw, Clock, DollarSign } from "lucide-react"
 import Link from "next/link"
 import DashboardLayout from "@/components/layouts/DashboardLayout"
 import { getAuth, onAuthStateChanged } from "firebase/auth"
-import { app } from "@/lib/firebase"
+import firebaseApp from "@/lib/firebase"
 import { useRouter } from "next/navigation"
 
 export default function BookingPage() {
@@ -23,7 +23,7 @@ export default function BookingPage() {
   const [userEmail, setUserEmail] = useState("")
 
   useEffect(() => {
-    const auth = getAuth(app)
+  const auth = getAuth(firebaseApp)
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserName(user.displayName || "")
@@ -108,8 +108,10 @@ export default function BookingPage() {
                       <Label className="text-white">Number of Hours</Label>
                       <select
                         value={selectedHours}
-                        onChange={(e) => setSelectedHours(Number(e.target.value))}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedHours(Number(e.target.value))}
                         className="mt-1 w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                        title="Number of Hours"
+                        aria-label="Number of Hours"
                       >
                         <option value={1}>1 Hour</option>
                         <option value={2}>2 Hours</option>
@@ -123,7 +125,7 @@ export default function BookingPage() {
                       <Input
                         type="date"
                         value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedDate(e.target.value)}
                         className="mt-1 bg-gray-700 border-gray-600 text-white"
                         min={new Date().toISOString().split("T")[0]}
                       />
@@ -133,8 +135,10 @@ export default function BookingPage() {
                       <Label className="text-white">Preferred Time</Label>
                       <select
                         value={selectedTime}
-                        onChange={(e) => setSelectedTime(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedTime(e.target.value)}
                         className="mt-1 w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                        title="Preferred Time"
+                        aria-label="Preferred Time"
                       >
                         <option value="">Select a time</option>
                         <option value="09:00">9:00 AM</option>
@@ -176,7 +180,7 @@ export default function BookingPage() {
             <div className="space-y-6">
               <Card className="bg-gray-800 border-gray-700">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-4">What's Included</h3>
+                  <h3 className="text-xl font-bold text-white mb-4">What&apos;s Included</h3>
                   <div className="space-y-3">
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 text-blue-400 mr-3" />
@@ -221,7 +225,7 @@ export default function BookingPage() {
                     </div>
                     <h4 className="text-lg font-bold text-gray-400 mb-2">Limited Availability</h4>
                     <p className="text-gray-500 mb-4">
-                      Sessions are in high demand. Book your preferred time above and we'll confirm availability.
+                      Sessions are in high demand. Book your preferred time above and we&apos;ll confirm availability.
                     </p>
                     <div className="space-y-1 text-sm text-gray-500">
                       <p>• Sessions typically available 1-2 weeks in advance</p>
