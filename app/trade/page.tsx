@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { ArrowLeft, TrendingUp, Check, Zap, Mail, MessageCircle } from "lucide-react"
+import DashboardLayout from "@/components/layouts/DashboardLayout"
 
 export default function TradePage() {
   const [email, setEmail] = useState("")
@@ -44,6 +45,7 @@ export default function TradePage() {
   }
 
   return (
+      <DashboardLayout>
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl mx-auto">
         <Card className="bg-gray-800 border-gray-700 mb-8">
@@ -90,5 +92,6 @@ export default function TradePage() {
         </Card>
       </div>
     </div>
+    </DashboardLayout>
   )
 }

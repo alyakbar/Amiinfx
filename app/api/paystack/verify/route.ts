@@ -1,24 +1,46 @@
 import { NextResponse } from "next/server";
+import axios from "axios";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const reference = searchParams.get("reference");
+  const { searchParams } = new URL(req.url);
+  const reference = searchParams.get("reference");
 
-    if (!reference) {
-      return NextResponse.json({ status: false, message: "Missing reference" }, { status: 400 });
+  if (!reference) {
+    return NextResponse.json({ error: "Missing transaction reference" }, { status: 400 });
+  }
+
+  try {
+    // Verify payment with Paystack
+    const verifyRes = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        },
+      }
+    );
+
+    const transaction = verifyRes.data.data;
+
+    if (transaction.status !== "success") {
+      return NextResponse.json({ error: "Payment not successful" }, { status: 400 });
     }
 
-    const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-      },
+    // Save transaction to Firestore
+    await addDoc(collection(db, "transactions"), {
+      email: transaction.customer.email,
+      amount: transaction.amount / 100, // convert from kobo
+      reference: transaction.reference,
+      status: transaction.status,
+      paid_at: transaction.paid_at,
+      createdAt: new Date(),
     });
 
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error("Paystack Verify Error:", error);
-    return NextResponse.json({ status: false, message: "Server error" }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Error verifying transaction:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

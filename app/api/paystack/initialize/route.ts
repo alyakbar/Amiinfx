@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { email, amount, name, service } = await req.json();
+    const { email, amount, name, service, planCode } = await req.json();
 
     const response = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
@@ -12,13 +12,16 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         email,
-        amount, // amount in kobo (NGN)
+        amount, // already in cents (KES * 100)
+        currency: "KES", // ✅ set to Kenyan Shillings
+        plan: planCode || undefined,
         metadata: {
           custom_fields: [
             { display_name: "Name", variable_name: "name", value: name },
             { display_name: "Service", variable_name: "service", value: service },
           ],
         },
+        callback_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
       }),
     });
 

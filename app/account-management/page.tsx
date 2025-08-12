@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { ArrowLeft, UserCheck, Check, Shield, BarChart3 } from "lucide-react"
+import DashboardLayout from "@/components/layouts/DashboardLayout"
 
 export default function AccountManagementPage() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
@@ -69,6 +70,7 @@ export default function AccountManagementPage() {
   ]
 
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl mx-auto">
         {/* Step 1: Headline */}
@@ -162,5 +164,6 @@ export default function AccountManagementPage() {
         </Card>
       </div>
     </div>
+    </DashboardLayout>
   )
 }

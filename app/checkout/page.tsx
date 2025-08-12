@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { X, ShoppingCart, CheckCircle } from "lucide-react"
+import DashboardLayout from "@/components/layouts/DashboardLayout"
 
 type Service = {
   id: string;
@@ -84,6 +85,7 @@ export default function CheckoutPage() {
   }
 
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-gray-900 text-white font-sans">
       {/* Hero */}
       <section className="w-full bg-gradient-to-br from-black via-gray-900 to-green-900 py-12 px-4 text-center mb-10">
@@ -112,5 +114,6 @@ export default function CheckoutPage() {
 
       {/* Cart and payment modals removed for single-service checkout */}
     </div>
+    </DashboardLayout>
   )
 }

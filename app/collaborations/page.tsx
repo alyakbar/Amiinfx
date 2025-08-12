@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
+import DashboardLayout from "@/components/layouts/DashboardLayout"
 import { ArrowLeft, Users2, Check, Instagram, Twitter, Youtube, Music, MessageCircle, ExternalLink } from "lucide-react"
 
 export default function CollaborationsPage() {
@@ -28,6 +29,7 @@ export default function CollaborationsPage() {
   ]
 
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex items-center mb-8">
@@ -149,5 +151,6 @@ export default function CollaborationsPage() {
         </div>
       </div>
     </div>
+    </DashboardLayout>
   )
 }

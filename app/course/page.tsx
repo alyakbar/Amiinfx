@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, BookOpen, Clock } from "lucide-react"
+import DashboardLayout from "@/components/layouts/DashboardLayout"
 
 export default function CoursePage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -32,6 +33,7 @@ export default function CoursePage() {
   }
 
   return (
+    <DashboardLayout>
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section for Master Sniper Entries */}
       <section className="relative w-full bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 pb-12 pt-8 md:pt-16 mb-10 flex items-center justify-center">
@@ -142,5 +144,6 @@ export default function CoursePage() {
         </div>
       </div>
     </div>
+    </DashboardLayout>
   )
 }
