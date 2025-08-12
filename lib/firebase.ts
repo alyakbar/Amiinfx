@@ -23,7 +23,7 @@ if (getApps().length === 0) {
 
 // Initialize services
 export const auth = getAuth(firebaseApp);
-export const db = getFirestore(firebaseApp);
+// export const db = getFirestore(firebaseApp);
 
 export default firebaseApp;
 
