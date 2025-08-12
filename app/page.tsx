@@ -113,8 +113,6 @@ export default function HomePage() {
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="text-white hover:text-blue-400 transition-colors p-2"
-                title="Open menu"
-                aria-label="Open menu"
               >
                 <Menu className="h-6 w-6" />
               </button>
@@ -144,8 +142,6 @@ export default function HomePage() {
             <button
               onClick={() => setDrawerOpen(false)}
               className="text-gray-400 hover:text-white transition-colors p-1"
-              title="Close menu"
-              aria-label="Close menu"
             >
               <X className="h-6 w-6" />
             </button>
@@ -194,7 +190,13 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section
-        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 hero-section-bg"
+        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
+        style={{
+          background: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/hero.jpg')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
       >
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-wider mb-6">
@@ -376,7 +378,7 @@ export default function HomePage() {
                     that compound into life-changing wealth.
                   </p>
                   <p className="text-gray-300">
-                    This isn&apos;t just a dream – it&apos;s your <span className="text-blue-400 font-semibold">new reality</span>{" "}
+                    This isn't just a dream – it's your <span className="text-blue-400 font-semibold">new reality</span>{" "}
                     with the right knowledge and guidance.
                   </p>
                 </div>
@@ -392,8 +394,8 @@ export default function HomePage() {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-300 text-sm italic mb-3 leading-relaxed">
-                      &quot;I went from struggling paycheck to paycheck to generating consistent monthly profits. The
-                      strategies actually work.&quot;
+                      "I went from struggling paycheck to paycheck to generating consistent monthly profits. The
+                      strategies actually work."
                     </p>
                     <div>
                       <p className="text-white font-semibold text-sm">Marcus Johnson</p>
@@ -428,7 +430,7 @@ export default function HomePage() {
                     <X className="h-8 w-8 text-red-400" />
                   </div>
                   <h3 className="text-2xl font-black tracking-wider text-red-400 mb-2">Traditional Path</h3>
-                  <p className="text-gray-400 italic">The &apos;safe&apos; route everyone talks about</p>
+                  <p className="text-gray-400 italic">The 'safe' route everyone talks about</p>
                 </div>
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
@@ -453,7 +455,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-red-300 italic font-semibold">&quot;Work for 40 years, hope for a decent retirement&quot;</p>
+                  <p className="text-red-300 italic font-semibold">"Work for 40 years, hope for a decent retirement"</p>
                 </div>
               </CardContent>
             </Card>
@@ -491,7 +493,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-blue-300 italic font-semibold">&quot;Master trading skills, create lasting wealth&quot;</p>
+                  <p className="text-blue-300 italic font-semibold">"Master trading skills, create lasting wealth"</p>
                 </div>
               </CardContent>
             </Card>
@@ -829,8 +831,6 @@ export default function HomePage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-purple-400 transition-colors"
-                  title="Instagram"
-                  aria-label="Instagram"
                 >
                   <Instagram className="h-5 w-5" />
                 </a>

@@ -1,18 +1,27 @@
+
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query, limit } from "firebase/firestore";
 
 export async function GET() {
   try {
-    const transactionsRef = collection(db, "transactions");
-    const q = query(transactionsRef, orderBy("createdAt", "desc"), limit(20));
-    const querySnapshot = await getDocs(q);
-
-    const transactions = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
+    // Return mock transactions since no database is used
+    const transactions = [
+      {
+        id: "1",
+        email: "user1@example.com",
+        amount: 100,
+        status: "success",
+        reference: "ref-001",
+        paid_at: new Date().toISOString(),
+      },
+      {
+        id: "2",
+        email: "user2@example.com",
+        amount: 200,
+        status: "pending",
+        reference: "ref-002",
+        paid_at: new Date().toISOString(),
+      }
+    ];
     return NextResponse.json({ transactions });
   } catch (error) {
     console.error("Error fetching transactions:", error);

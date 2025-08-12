@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { db } from "@/lib/firebase";
-import { collection, addDoc } from "firebase/firestore";
+
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -28,15 +27,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Payment not successful" }, { status: 400 });
     }
 
-    // Save transaction to Firestore
-    await addDoc(collection(db, "transactions"), {
-      email: transaction.customer.email,
-      amount: transaction.amount / 100, // convert from kobo
-      reference: transaction.reference,
-      status: transaction.status,
-      paid_at: transaction.paid_at,
-      createdAt: new Date(),
-    });
+  // Firestore usage removed. You can add your own logic here if needed.
 
     return NextResponse.json({ success: true });
   } catch (err) {
