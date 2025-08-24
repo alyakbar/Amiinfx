@@ -1,0 +1,146 @@
+[
+  {
+    "id": "mpesa_f33b-4c45-9fee-904913aa19db64275_ws_CO_210820252354013794596226",
+    "type": "mpesa",
+    "status": "cancelled",
+    "amount": 0,
+    "currency": "KES",
+    "email": "",
+    "phone": "",
+    "name": "",
+    "reference": "ws_CO_210820252354013794596226",
+    "metadata": {
+      "merchantRequestID": "f33b-4c45-9fee-904913aa19db64275",
+      "resultCode": 1032,
+      "resultDesc": "Request Cancelled by user"
+    },
+    "paid_at": "2025-08-21T20:54:31.228Z",
+    "raw_data": {
+      "MerchantRequestID": "f33b-4c45-9fee-904913aa19db64275",
+      "CheckoutRequestID": "ws_CO_210820252354013794596226",
+      "ResultCode": 1032,
+      "ResultDesc": "Request Cancelled by user"
+    },
+    "processed_at": "2025-08-22T06:13:24.957Z"
+  },
+  {
+    "id": "mpesa_9e7e-40db-8b50-7076b4e109445566_ws_CO_220820250049026794596226",
+    "type": "mpesa",
+    "status": "cancelled",
+    "amount": 0,
+    "currency": "KES",
+    "email": "",
+    "phone": "",
+    "name": "",
+    "reference": "ws_CO_220820250049026794596226",
+    "metadata": {
+      "merchantRequestID": "9e7e-40db-8b50-7076b4e109445566",
+      "resultCode": 1032,
+      "resultDesc": "Request Cancelled by user."
+    },
+    "paid_at": "2025-08-21T21:49:12.712Z",
+    "raw_data": {
+      "MerchantRequestID": "9e7e-40db-8b50-7076b4e109445566",
+      "CheckoutRequestID": "ws_CO_220820250049026794596226",
+      "ResultCode": 1032,
+      "ResultDesc": "Request Cancelled by user."
+    },
+    "processed_at": "2025-08-22T06:13:24.983Z"
+  },
+  {
+    "id": "mpesa_f33b-4c45-9fee-904913aa19db65137_ws_CO_220820250106462794596226",
+    "type": "mpesa",
+    "status": "cancelled",
+    "amount": 258.7,
+    "currency": "KES",
+    "email": "",
+    "phone": "254794596226",
+    "name": "",
+    "reference": "ws_CO_220820250106462794596226",
+    "metadata": {
+      "merchantRequestID": "f33b-4c45-9fee-904913aa19db65137",
+      "resultCode": 1032,
+      "resultDesc": "Request Cancelled by user."
+    },
+    "paid_at": "2025-08-21T22:06:59.562Z",
+    "raw_data": {
+      "MerchantRequestID": "f33b-4c45-9fee-904913aa19db65137",
+      "CheckoutRequestID": "ws_CO_220820250106462794596226",
+      "ResultCode": 1032,
+      "ResultDesc": "Request Cancelled by user."
+    },
+    "processed_at": "2025-08-22T06:13:24.983Z"
+  },
+  {
+    "id": "mpesa_5d8d-4748-8927-ae44d417b76c57970_ws_CO_220820250633419757085200",
+    "type": "mpesa",
+    "status": "cancelled",
+    "amount": 258.7,
+    "currency": "KES",
+    "email": "",
+    "phone": "254757085200",
+    "name": "",
+    "reference": "ws_CO_220820250633419757085200",
+    "metadata": {
+      "merchantRequestID": "5d8d-4748-8927-ae44d417b76c57970",
+      "resultCode": 1032,
+      "resultDesc": "Request Cancelled by user."
+    },
+    "paid_at": "2025-08-22T03:34:04.798Z",
+    "raw_data": {
+      "MerchantRequestID": "5d8d-4748-8927-ae44d417b76c57970",
+      "CheckoutRequestID": "ws_CO_220820250633419757085200",
+      "ResultCode": 1032,
+      "ResultDesc": "Request Cancelled by user."
+    },
+    "processed_at": "2025-08-22T06:13:24.985Z"
+  },
+  {
+    "id": "mpesa_9e7e-40db-8b50-7076b4e109448152_ws_CO_220820250635514794204465",
+    "type": "mpesa",
+    "status": "failed",
+    "amount": 258.7,
+    "currency": "KES",
+    "email": "",
+    "phone": "254794204465",
+    "name": "",
+    "reference": "ws_CO_220820250635514794204465",
+    "metadata": {
+      "merchantRequestID": "9e7e-40db-8b50-7076b4e109448152",
+      "resultCode": 1037,
+      "resultDesc": "No response from user."
+    },
+    "paid_at": "2025-08-22T03:36:19.287Z",
+    "raw_data": {
+      "MerchantRequestID": "9e7e-40db-8b50-7076b4e109448152",
+      "CheckoutRequestID": "ws_CO_220820250635514794204465",
+      "ResultCode": 1037,
+      "ResultDesc": "No response from user."
+    },
+    "processed_at": "2025-08-22T06:13:24.985Z"
+  },
+  {
+    "id": "mpesa_9e7e-40db-8b50-7076b4e109449042_ws_CO_220820250907597708374149",
+    "type": "mpesa",
+    "status": "failed",
+    "amount": 778.7,
+    "currency": "KES",
+    "email": "test@gmail.com",
+    "phone": "254708374149",
+    "name": "test",
+    "reference": "ws_CO_220820250907597708374149",
+    "metadata": {
+      "merchantRequestID": "9e7e-40db-8b50-7076b4e109449042",
+      "resultCode": 1037,
+      "resultDesc": "No response from user."
+    },
+    "paid_at": "2025-08-22T06:08:29.349Z",
+    "raw_data": {
+      "MerchantRequestID": "9e7e-40db-8b50-7076b4e109449042",
+      "CheckoutRequestID": "ws_CO_220820250907597708374149",
+      "ResultCode": 1037,
+      "ResultDesc": "No response from user."
+    },
+    "processed_at": "2025-08-22T06:13:24.986Z"
+  }
+]

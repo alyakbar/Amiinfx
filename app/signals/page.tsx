@@ -6,9 +6,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, TrendingUp, Check, Star } from "lucide-react";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
+import { useState } from "react";
 
 export default function SignalsPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
 
   const plans = [
     {
@@ -59,8 +61,54 @@ export default function SignalsPage() {
     },
   ];
 
-  const handleSubscribe = (plan: { slug: string; price: number }) => {
-    router.push(`/checkout/${plan.slug}?price=${plan.price}`);
+  const handleSubscribe = async (plan: { slug: string; price: number; name: string }) => {
+    // For now, use a simple prompt to get user details
+    // In production, you might want to integrate with your auth system
+    const name = prompt("Please enter your full name:");
+    const email = prompt("Please enter your email address:");
+    
+    if (!name || !email) {
+      alert("Name and email are required to proceed with subscription.");
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(plan.slug);
+
+    try {
+      const response = await fetch('/api/paddle/subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          planType: plan.slug,
+          email: email,
+          name: name,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.status && data.checkout_url) {
+        // Redirect to Paddle checkout
+        window.location.href = data.checkout_url;
+      } else {
+        console.error('Subscription initialization failed:', data);
+        alert(data.message || 'Failed to initialize subscription. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error initiating subscription:', error);
+      alert('An error occurred while processing your request. Please try again.');
+    } finally {
+      setLoading(null);
+    }
   };
 
   return (
@@ -138,13 +186,14 @@ export default function SignalsPage() {
 
                 <Button
                   onClick={() => handleSubscribe(plan)}
+                  disabled={loading === plan.slug}
                   className={`w-full font-bold py-3 ${
                     plan.popular
                       ? "bg-blue-600 hover:bg-blue-700"
                       : "bg-red-600 hover:bg-red-700"
-                  } text-white`}
+                  } text-white disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  SUBSCRIBE NOW
+                  {loading === plan.slug ? "Processing..." : "SUBSCRIBE NOW"}
                 </Button>
               </CardContent>
             </Card>

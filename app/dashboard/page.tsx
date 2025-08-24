@@ -4,12 +4,12 @@ import { useEffect, useState } from "react"
 import styles from "./page.module.css"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { signOut } from "firebase/auth"
 import { auth } from "@/lib/firebase"
 import { useAuth } from "@/hooks/useAuth"
+import { useToast } from "@/hooks/use-toast"
 import {
   BarChart3,
   TrendingUp,
@@ -33,12 +33,24 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
   const { user, loading, initialized } = useAuth()
+  const { toast } = useToast()
 
   useEffect(() => {
     if (initialized && !user) {
       router.push("/login")
     }
   }, [user, initialized, router])
+
+  // Show welcome toast when user is available
+  useEffect(() => {
+    if (initialized && user) {
+      const userName = user.displayName?.split(" ")[0] || "User"
+      toast({
+        title: `Welcome back, ${userName}!`,
+        description: "You're now in your dashboard.",
+      })
+    }
+  }, [initialized, user, toast])
 
   const handleLogout = async () => {
     try {
@@ -61,7 +73,6 @@ export default function DashboardPage() {
       href: "/account-management",
       subtitle: "Let Amiin manage your trades",
     },
-    // { name: "Resources", icon: BookOpen, href: "/resources", badge: "NEW", subtitle: "Learning materials" },
     { name: "Collaborations", icon: Users2, href: "/collaborations", subtitle: "Brand partnerships" },
     { name: "Academy", icon: GraduationCap, href: "/academy", subtitle: "In-person training" },
     { name: "Booking", icon: Calendar, href: "/booking", subtitle: "Schedule sessions" },
@@ -181,7 +192,6 @@ export default function DashboardPage() {
             >
               <item.icon className="h-5 w-5 mr-3" />
               <span className="flex-1">{item.name}</span>
-              {item.badge && <Badge className="bg-red-500 text-white text-xs px-2 py-1">{item.badge}</Badge>}
             </Link>
           ))}
         </nav>
@@ -243,7 +253,7 @@ export default function DashboardPage() {
                 Welcome back, {user.displayName?.split(" ")[0] || "User"}!<span className="ml-2">👋</span>
               </h2>
               <p className="text-gray-400 text-xs sm:text-sm text-center mt-1">
-                Here's your complete navigation hub. Click any card to access that section.
+                Here&apos;s your complete navigation hub. Click any card to access that section.
               </p>
             </CardContent>
           </Card>

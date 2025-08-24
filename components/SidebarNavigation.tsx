@@ -10,6 +10,7 @@ export interface NavItem {
   icon: LucideIcon; // from lucide-react
   href: string;
   subtitle?: string;
+  badge?: string;
 }
 
 interface SidebarProps {
@@ -26,7 +27,7 @@ const SidebarNavigation: FC<SidebarProps> = ({ items }) => {
   };
 
   return (
-    <aside className="w-72 shrink-0 bg-gray-50 border-r h-dvh p-4">
+  <aside className="w-80 shrink-0 bg-gray-50 border-r h-dvh p-4 mr-8 lg:mr-16">
       <nav className="space-y-1">
         {items.map((item) => {
           const active = isActive(item.href);
@@ -43,10 +44,10 @@ const SidebarNavigation: FC<SidebarProps> = ({ items }) => {
               aria-current={active ? 'page' : undefined}
             >
               <item.icon className="h-5 w-5" />
-              <div className="min-w-0">
-                <div className="font-medium truncate">{item.name}</div>
+              <div className="min-w-0 flex flex-col overflow-hidden">
+                <div className="font-medium truncate overflow-hidden w-full">{item.name}</div>
                 {item.subtitle && (
-                  <div className={active ? 'text-blue-100 text-sm' : 'text-gray-500 text-sm'}>
+                  <div className={active ? 'text-blue-100 text-sm truncate overflow-hidden w-full' : 'text-gray-500 text-sm truncate overflow-hidden w-full'}>
                     {item.subtitle}
                   </div>
                 )}

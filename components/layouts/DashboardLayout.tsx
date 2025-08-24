@@ -94,9 +94,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   }`}
                 />
                 {item.name}
-                {item.badge && (
+                {((item as any).badge) && (
                   <Badge className="bg-red-500 text-white text-xs px-2 py-1 ml-auto">
-                    {item.badge}
+                    {(item as any).badge}
                   </Badge>
                 )}
               </Link>

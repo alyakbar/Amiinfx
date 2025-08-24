@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { saveMpesaTransaction } from "@/lib/firestore-admin";
 
 export async function POST(req: Request) {
   try {
@@ -26,6 +27,12 @@ export async function POST(req: Request) {
     });
 
     const data = await response.json();
+    // attempt to save init record to Firestore (if configured)
+    try {
+      await saveMpesaTransaction({ provider: "paystack", stage: "init", initData: data, email, amount, name, service });
+    } catch (err) {
+      console.warn("Failed to save paystack init to Firestore", err);
+    }
     return NextResponse.json(data);
   } catch (error) {
     console.error("Paystack Init Error:", error);

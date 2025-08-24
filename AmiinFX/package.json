@@ -1,0 +1,30 @@
+{
+  "name": "AmiinFX",
+  "version": "1.0.0",
+  "description": "A project for integrating Binance payment system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "nextjs",
+    "binance",
+    "payment"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-next": "^12.0.7",
+    "typescript": "^4.4.4"
+  }
+}

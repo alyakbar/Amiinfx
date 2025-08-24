@@ -1,0 +1,85 @@
+/* Admin Dashboard Specific Styles - Dark Blue Theme */
+.admin-dashboard {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #312e81 100%);
+  background-attachment: fixed;
+  overflow-x: hidden; /* prevent horizontal scroll / white gutters */
+}
+
+/* Ensure full coverage on all devices */
+.admin-dashboard::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #312e81 100%);
+  z-index: -1;
+}
+
+/* Remove any gaps between sidebar and main content */
+.admin-dashboard > div {
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom scrollbar for admin dark theme */
+.admin-dashboard ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-dashboard ::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+.admin-dashboard ::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+.admin-dashboard ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Admin-specific hover effects for dark theme */
+.admin-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Admin glassmorphism for dark theme */
+.admin-glass {
+  background: rgba(30, 41, 59, 0.25);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 116, 139, 0.18);
+}
+
+/* Chart styling for admin */
+.admin-chart .recharts-wrapper {
+  font-family: inherit;
+}
+
+/* Admin-specific animations */
+.admin-fade-in {
+  animation: adminFadeIn 0.5s ease-in-out;
+}
+
+.admin-slide-in {
+  animation: adminSlideIn 0.3s ease-out;
+}
+
+@keyframes adminFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes adminSlideIn {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}

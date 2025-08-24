@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -32,6 +34,16 @@ export default function HomePage() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // If the user is already signed in, send them straight to the dashboard
+  const router = useRouter()
+  const { user, initialized } = useAuth()
+
+  useEffect(() => {
+    if (initialized && user) {
+      router.push('/dashboard')
+    }
+  }, [initialized, user, router])
 
   const menuItems = [
     { name: "Start Trading", icon: TrendingUp },
@@ -84,7 +96,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white font-sans">
       {/* Header */}
-      <header className="fixed top-0 w-full bg-black/90 backdrop-blur-sm border-b border-gray-800 z-40">
+  <header className="fixed top-0 w-full bg-black/90 backdrop-blur-sm border-b border-gray-800 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -113,6 +125,8 @@ export default function HomePage() {
               <button
                 onClick={() => setDrawerOpen(true)}
                 className="text-white hover:text-blue-400 transition-colors p-2"
+                aria-label="Open menu"
+                title="Open menu"
               >
                 <Menu className="h-6 w-6" />
               </button>
@@ -142,6 +156,8 @@ export default function HomePage() {
             <button
               onClick={() => setDrawerOpen(false)}
               className="text-gray-400 hover:text-white transition-colors p-1"
+              aria-label="Close menu"
+              title="Close menu"
             >
               <X className="h-6 w-6" />
             </button>
@@ -189,15 +205,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section */}
-      <section
-        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
-        style={{
-          background: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/hero.jpg')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      >
+  <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 hero-bg">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-wider mb-6">
             Start Your <span className="text-blue-400">Trading Journey</span>
@@ -377,10 +385,10 @@ export default function HomePage() {
                     Picture yourself making <span className="text-blue-400 font-semibold">strategic decisions</span>{" "}
                     that compound into life-changing wealth.
                   </p>
-                  <p className="text-gray-300">
-                    This isn't just a dream – it's your <span className="text-blue-400 font-semibold">new reality</span>{" "}
-                    with the right knowledge and guidance.
-                  </p>
+                          <p className="text-gray-300">
+                            This isn&apos;t just a dream – it&apos;s your <span className="text-blue-400 font-semibold">new reality</span>{" "}
+                            with the right knowledge and guidance.
+                          </p>
                 </div>
               </div>
 
@@ -394,13 +402,20 @@ export default function HomePage() {
                   </div>
                   <div className="flex-1">
                     <p className="text-gray-300 text-sm italic mb-3 leading-relaxed">
-                      "I went from struggling paycheck to paycheck to generating consistent monthly profits. The
-                      strategies actually work."
+                      &quot;I went from struggling paycheck to paycheck to generating consistent monthly profits. The
+                        strategies actually work.&quot;
                     </p>
-                    <div>
-                      <p className="text-white font-semibold text-sm">Marcus Johnson</p>
-                      <p className="text-blue-400 text-xs">6-Figure Trader</p>
-                    </div>
+                    <a
+                      href="https://www.instagram.com/amiin__fx/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sm:hidden flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-6 py-3 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25"
+                      aria-label="Follow on Instagram"
+                      title="Follow on Instagram"
+                    >
+                      <Instagram className="h-5 w-5" />
+                      <span className="font-medium">Follow on Instagram</span>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -430,7 +445,7 @@ export default function HomePage() {
                     <X className="h-8 w-8 text-red-400" />
                   </div>
                   <h3 className="text-2xl font-black tracking-wider text-red-400 mb-2">Traditional Path</h3>
-                  <p className="text-gray-400 italic">The 'safe' route everyone talks about</p>
+                  <p className="text-gray-400 italic">The &apos;safe&apos; route everyone talks about</p>
                 </div>
                 <div className="space-y-4 mb-8">
                   <div className="flex items-start">
@@ -455,7 +470,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-red-300 italic font-semibold">"Work for 40 years, hope for a decent retirement"</p>
+                  <p className="text-red-300 italic font-semibold">&quot;Work for 40 years, hope for a decent retirement&quot;</p>
                 </div>
               </CardContent>
             </Card>
@@ -493,7 +508,7 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-blue-300 italic font-semibold">"Master trading skills, create lasting wealth"</p>
+                  <p className="text-blue-300 italic font-semibold">&quot;Master trading skills, create lasting wealth&quot;</p>
                 </div>
               </CardContent>
             </Card>
@@ -825,12 +840,13 @@ export default function HomePage() {
                 Empowering traders worldwide to achieve financial freedom through education, mentorship, and proven
                 strategies.
               </p>
-              <div className="flex space-x-4">
+                <div className="flex space-x-4">
                 <a
                   href="https://www.instagram.com/amiin__fx/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-purple-400 transition-colors"
+                  aria-label="Amiin FX Instagram"
                 >
                   <Instagram className="h-5 w-5" />
                 </a>

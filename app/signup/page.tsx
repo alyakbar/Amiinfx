@@ -22,8 +22,11 @@ export default function SignupPage() {
     agreeToTerms: false,
   })
   const [localError, setLocalError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [emailCheckLoading, setEmailCheckLoading] = useState(false)
+  const [emailExists, setEmailExists] = useState(false)
   const router = useRouter()
-  const { register, loading, error, clearError, user, initialized } = useAuth()
+  const { error, clearError, user, initialized } = useAuth()
 
   // Redirect if already logged in
   useEffect(() => {
@@ -44,7 +47,55 @@ export default function SignupPage() {
       ...prev,
       [name]: value,
     }))
+
+    // Clear email exists flag when user modifies email
+    if (name === "email") {
+      setEmailExists(false)
+    }
   }
+
+  const checkEmailAvailability = async (email: string) => {
+    if (!email || !email.includes("@")) {
+      return
+    }
+
+    setEmailCheckLoading(true)
+    try {
+      const response = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (data.exists) {
+        setEmailExists(true)
+        setLocalError("An account with this email already exists. Please sign in instead.")
+      } else if (data.hasPendingOTP) {
+        setLocalError("A verification code was already sent to this email. Please check your inbox.")
+      } else {
+        setEmailExists(false)
+        setLocalError("")
+      }
+    } catch (error) {
+      console.error("Email check error:", error)
+      // Don't show error to user, just allow them to proceed
+    } finally {
+      setEmailCheckLoading(false)
+    }
+  }
+
+  // Debounced email check
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (formData.email && formData.email.includes("@")) {
+        checkEmailAvailability(formData.email)
+      }
+    }, 1000) // Wait 1 second after user stops typing
+
+    return () => clearTimeout(timeoutId)
+  }, [formData.email])
 
   const validateForm = () => {
     if (
@@ -60,6 +111,11 @@ export default function SignupPage() {
 
     if (!formData.email.includes("@")) {
       setLocalError("Please enter a valid email address")
+      return false
+    }
+
+    if (emailExists) {
+      setLocalError("An account with this email already exists. Please sign in instead.")
       return false
     }
 
@@ -89,14 +145,49 @@ export default function SignupPage() {
       return
     }
 
-    try {
-      const fullName = `${formData.firstName} ${formData.lastName}`
-      await register(formData.email, formData.password, fullName)
+    setLoading(true)
 
-      // Redirect will happen automatically via useEffect when user state changes
+    try {
+      // Send OTP to email
+      const response = await fetch("/api/auth/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Redirect to OTP verification page with user data
+        const params = new URLSearchParams({
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          password: formData.password,
+        })
+        router.push(`/verify-otp?${params.toString()}`)
+      } else {
+        // Handle specific error cases
+        if (response.status === 409) {
+          // Email already exists
+          setEmailExists(true)
+          setLocalError("An account with this email already exists. Please sign in instead.")
+        } else if (response.status === 429) {
+          // Too many requests / pending OTP
+          setLocalError("A verification code was already sent to this email. Please check your inbox or wait before requesting a new code.")
+        } else {
+          setLocalError(data.error || "Failed to send verification code")
+        }
+      }
     } catch (error) {
-      // Error is handled by the auth hook
-      console.error("Registration failed:", error)
+      console.error("Signup error:", error)
+      setLocalError("Failed to send verification code. Please try again.")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -182,17 +273,44 @@ export default function SignupPage() {
                 <Label htmlFor="email" className="text-white">
                   Email Address
                 </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="mt-1 bg-gray-700 border-gray-600 text-white"
-                  placeholder="Enter your email"
-                  required
-                  disabled={loading}
-                />
+                <div className="relative">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`mt-1 bg-gray-700 border-gray-600 text-white pr-10 ${
+                      emailExists ? "border-red-500 focus:border-red-500" : 
+                      formData.email && !emailCheckLoading && !emailExists ? "border-green-500" : ""
+                    }`}
+                    placeholder="Enter your email"
+                    required
+                    disabled={loading}
+                  />
+                  {emailCheckLoading && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 mt-0.5">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+                    </div>
+                  )}
+                  {!emailCheckLoading && formData.email && formData.email.includes("@") && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 mt-0.5">
+                      {emailExists ? (
+                        <span className="text-red-500">✗</span>
+                      ) : (
+                        <span className="text-green-500">✓</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {emailExists && (
+                  <p className="text-xs text-red-400 mt-1">
+                    This email is already registered. <Link href="/login" className="text-blue-400 hover:text-blue-300 underline">Sign in instead</Link>
+                  </p>
+                )}
+                {!emailExists && formData.email && formData.email.includes("@") && !emailCheckLoading && (
+                  <p className="text-xs text-green-400 mt-1">Email is available</p>
+                )}
               </div>
 
               <div>
@@ -251,10 +369,13 @@ export default function SignupPage() {
 
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || emailExists || emailCheckLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Creating Account..." : "Create Account"}
+                {loading ? "Sending Verification Code..." : 
+                 emailExists ? "Email Already Registered" :
+                 emailCheckLoading ? "Checking Email..." :
+                 "Send Verification Code"}
               </Button>
             </form>
 
